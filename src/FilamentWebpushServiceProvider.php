@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace FilamentWebpush;
 
+use FilamentWebpush\Commands\PrepareWebpushCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -14,7 +15,8 @@ class FilamentWebpushServiceProvider extends PackageServiceProvider
         $package
             ->name('filament-webpush')
             ->hasConfigFile()
+            ->hasCommand(PrepareWebpushCommand::class)
             ->hasViews()
-            ->hasRoutes();
+            ->hasRoute('web');
     }
 }

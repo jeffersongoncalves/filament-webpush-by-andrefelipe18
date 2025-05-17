@@ -1,6 +1,6 @@
 {
     "name": "andrefelipe18/filament-webpush",
-    "description": "This is my package filament-webpush",
+    "description": "Easy way to send web push notifications in filament apps.",
     "keywords": [
         "filament-webpush",
         "laravel",
