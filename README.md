@@ -52,7 +52,8 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->plugins([
-                FilamentWebpushPlugin::make(),
+                FilamentWebpushPlugin::make()
+                    ->registerSubscriptionStatsWidget(true),
             ]);
     }
 }
