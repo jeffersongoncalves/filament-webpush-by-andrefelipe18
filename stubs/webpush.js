@@ -6,6 +6,10 @@ const registerWebPush = () => {
         return;
     }
 
+    // Register service worker
+    navigator.serviceWorker
+        .register("/sw.js")
+
     // Get VAPID public key
     const vapidPublicKey = document.querySelector(
         'meta[name="vapid-public-key"]'

@@ -72,6 +72,11 @@ class PrepareWebpushCommand extends Command
         $this->copyWebpushJs();
         $this->newLine();
 
+        // Step 7: Copy offline.html file
+        note('Copying offline.html file to the public directory...');
+        $this->copyHtmlFile();
+        $this->newLine();
+
         note('WebPush setup completed successfully!');
         $this->newLine();
 
@@ -115,6 +120,22 @@ class PrepareWebpushCommand extends Command
 
         File::copy($source, $destination);
         info("✔ WebPush JavaScript file copied to: {$destination}");
+    }
+
+    /**
+     * Copy offline.html file to the public directory
+     */
+    protected function copyHtmlFile(): void
+    {
+        $source      = __DIR__ . '/../../stubs/offline.html';
+        $destination = public_path('offline.html');
+
+        if (! File::exists(public_path())) {
+            File::makeDirectory(public_path(), 0755, true);
+        }
+
+        File::copy($source, $destination);
+        info("✔ offline.html file copied to: {$destination}");
     }
 
     /**
