@@ -14,7 +14,6 @@ class FilamentWebpushServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('filament-webpush')
-            ->hasConfigFile()
             ->hasCommand(PrepareWebpushCommand::class)
             ->hasViews()
             ->hasRoute('web');
