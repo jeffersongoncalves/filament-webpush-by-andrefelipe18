@@ -119,7 +119,7 @@ class PrepareWebpushCommand extends Command
         $envContent = File::get($envExamplePath);
 
         // Prepare VAPID environment variables
-        $vapidEnvVars = "\n# WebPush VAPID Keys\nVAPID_PUBLIC_KEY=\"\"\nVAPID_PRIVATE_KEY=\"\"\nVAPID_SUBJECT=\"mailto:\${APP_NAME}@\${APP_URL}\"\n";
+        $vapidEnvVars = "\n# Vapid keys for web push notifications\n# Generate in https://web-push-codelab.glitch.me/\nVAPID_PUBLIC_KEY=\"\"\nVAPID_PRIVATE_KEY=\"\"\nVAPID_SUBJECT=\"mailto:\${APP_NAME}@\${APP_URL}\"\n";
 
         // Check if VAPID keys already exist in .env.example
         if (in_array(str_contains($envContent, 'VAPID_PUBLIC_KEY='), [0, false], true)) {
