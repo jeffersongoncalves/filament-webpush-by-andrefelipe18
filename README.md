@@ -131,6 +131,15 @@ use App\Notifications\NewPostPublished;
 $user->notify(new NewPostPublished($post));
 ```
 
+> **Important:**
+> Web Push notifications are queued by default. You **must** have a queue worker running for notifications to be delivered. Start a queue worker with:
+>
+> ```bash
+> php artisan queue:work
+> ```
+>
+> For more information, see the [Laravel Queues documentation](https://laravel.com/docs/queues).
+
 ## HTTPS Requirement
 
 Web Push Notifications require a secure context to work properly. This means your application must be served over HTTPS. Modern browsers enforce this requirement as part of their security model, and will block push notifications and service worker registration on non-secure origins.
