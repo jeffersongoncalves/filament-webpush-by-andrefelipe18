@@ -7,6 +7,7 @@ namespace FilamentWebpush\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
+use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\warning;
@@ -36,22 +37,30 @@ class PrepareWebpushCommand extends Command
         ]);
 
         // Step 3: Generate VAPID keys if not on Windows
-        /*if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-            info('Generating VAPID keys...');
-            $vapidOutput = '';
-            $this->call('webpush:vapid', [], function ($type, $buffer) use (&$vapidOutput) {
-                $vapidOutput .= $buffer;
-            });
-
-            $this->updateEnvExample($vapidOutput);
-        } else {
-            warning('Skipping VAPID key generation on Windows. You should run "php artisan webpush:vapid" on a non-Windows environment.');
-        } */
 
         // Add VAPID variables to .env.example regardless of OS
         note('Adding VAPID variables to .env.example...');
         $this->addVapidVariablesToEnv();
         $this->newLine();
+
+        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+            info('Generating VAPID keys...');
+            
+            try {
+                $result = $this->call('webpush:vapid');
+
+                if ($result === 0) {
+                    info('VAPID keys generated successfully.');
+                } else {
+                    error('Failed to generate VAPID keys. Please manually generate them using the command "php artisan webpush:vapid".');
+                }
+            } catch (\Exception $e) {
+                error('Failed to generate VAPID keys. Please manually generate them using the command "php artisan webpush:vapid".');
+                return self::FAILURE;
+            }
+        } else {
+            error('VAPID keys generation is not supported on Windows. Please manually create using the http://web-push-codelab.glitch.me/ website and add them to your .env file.');
+        }
 
         // Step 4: Copy a service worker file
         note('Copying service worker file...');
