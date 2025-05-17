@@ -10,7 +10,9 @@ use Filament\Support\Concerns\EvaluatesClosures;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use FilamentWebpush\Filament\Widgets\WebpushSubscriptionStats;
+use FilamentWebPush\Http\Controllers\PushSubscriptionController;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 
 class FilamentWebpushPlugin implements Plugin
 {
@@ -25,6 +27,12 @@ class FilamentWebpushPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
+        $panel->routes(function () use ($panel) {
+            Route::middleware(['web', 'auth:' . $panel->getAuthGuard()])->group(function () {
+                Route::post('/push-subscriptions', [PushSubscriptionController::class, 'store'])->name('webpush-store');
+                Route::post('/push-subscriptions/delete', [PushSubscriptionController::class, 'destroy'])->name('webpush-destroy');
+            });
+        });
         if ($this->shouldRegisterSubscriptionStatsWidget()) {
             $panel->widgets([
                 WebpushSubscriptionStats::class,
@@ -36,21 +44,25 @@ class FilamentWebpushPlugin implements Plugin
     {
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
-            function () {
-                if (! auth()->check()) {
+            function () use ($panel) {
+                if (!auth($panel->getAuthGuard())->check()) {
                     return '';
                 }
 
                 $vapidPublicKey = Config::get('webpush.vapid.public_key');
 
-                return view('filament-webpush::meta', ['vapidPublicKey' => $vapidPublicKey]);
+                return view('filament-webpush::meta', [
+                    'vapidPublicKey' => $vapidPublicKey,
+                    'storeUrl' => route('filament.' . $panel->getId() . '.webpush-store'),
+                    'destroyUrl' => route('filament.' . $panel->getId() . '.webpush-destroy'),
+                ]);
             }
         );
 
         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_END,
-            function () {
-                if (! auth()->check()) {
+            function () use ($panel) {
+                if (!auth($panel->getAuthGuard())->check()) {
                     return '';
                 }
 

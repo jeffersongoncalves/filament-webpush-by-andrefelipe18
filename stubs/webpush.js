@@ -19,6 +19,15 @@ const registerWebPush = () => {
         console.error("VAPID public key not found");
         return;
     }
+    // Get Url Store by FilamentPanel
+    const webpushStore = document.querySelector(
+        'meta[name="webpush-store"]'
+    )?.content;
+
+    // Get Url Destroy by FilamentPanel
+    const webpushDestroy = document.querySelector(
+        'meta[name="webpush-destroy"]'
+    )?.content;
 
     // Function to convert Base64 to Uint8Array for applicationServerKey
     const urlBase64ToUint8Array = (base64String) => {
@@ -68,7 +77,7 @@ const registerWebPush = () => {
         })
         .then((subscription) => {
             // Send subscription to server
-            return fetch("/push-subscriptions", {
+            return fetch(webpushStore, {
                 method: "POST",
                 body: JSON.stringify(subscription),
                 headers: {
