@@ -75,7 +75,7 @@ class PrepareWebpushCommand extends Command
         $this->newLine();
 
         if ($isRunningOnWindows) {
-            warning('VAPID key generation is not supported on Windows. Please generate them at https://web-push-codelab.glitch.me/ and update your .env file manually.');
+            error('VAPID key generation is not supported on Windows. Please generate them at https://web-push-codelab.glitch.me/ and update your .env file manually.');
             $this->newLine();
         }
 
