@@ -130,6 +130,16 @@ use App\Notifications\NewPostPublished;
 $user->notify(new NewPostPublished($post));
 ```
 
+## HTTPS Requirement
+
+Web Push Notifications require a secure context to work properly. This means your application must be served over HTTPS. Modern browsers enforce this requirement as part of their security model, and will block push notifications and service worker registration on non-secure origins.
+
+The only exception is when you're developing on `localhost`, where service workers and push notifications are allowed without HTTPS for convenience.
+
+In production, your site must use HTTPS in order for push notifications to function correctly.
+
+If you are deploying your application with a tool like Laravel Forge, remember to enable SSL using Let's Encrypt or another certificate provider.
+
 ## Browser Compatibility
 
 Web Push is supported in most modern browsers:
