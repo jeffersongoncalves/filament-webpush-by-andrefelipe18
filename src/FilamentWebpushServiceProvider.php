@@ -21,9 +21,4 @@ class FilamentWebpushServiceProvider extends PackageServiceProvider
             ])
             ->hasViews();
     }
-
-    public function bootingPackage(): void
-    {
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-    }
 }
