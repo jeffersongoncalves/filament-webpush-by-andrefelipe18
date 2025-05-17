@@ -15,7 +15,11 @@ class FilamentWebpushServiceProvider extends PackageServiceProvider
         $package
             ->name('filament-webpush')
             ->hasCommand(PrepareWebpushCommand::class)
-            ->hasViews()
-            ->hasRoute('web');
+            ->hasViews();
+    }
+
+    public function bootingPackage(): void
+    {
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
     }
 }
