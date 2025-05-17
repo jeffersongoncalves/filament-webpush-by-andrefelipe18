@@ -7,7 +7,9 @@ namespace FilamentWebpush\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-use function Laravel\Prompts\{info, warning, note};
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\note;
+use function Laravel\Prompts\warning;
 
 class PrepareWebpushCommand extends Command
 {
@@ -22,15 +24,15 @@ class PrepareWebpushCommand extends Command
         // Step 1: Publish migrations
         note('Publishing WebPush migrations...');
         $this->call('vendor:publish', [
-            '--provider' => 'NotificationChannels\WebPush\WebPushServiceProvider',
-            '--tag' => 'migrations',
+            '--provider' => \NotificationChannels\WebPush\WebPushServiceProvider::class,
+            '--tag'      => 'migrations',
         ]);
 
         // Step 2: Publish config
         note('Publishing WebPush config...');
         $this->call('vendor:publish', [
-            '--provider' => 'NotificationChannels\WebPush\WebPushServiceProvider',
-            '--tag' => 'config',
+            '--provider' => \NotificationChannels\WebPush\WebPushServiceProvider::class,
+            '--tag'      => 'config',
         ]);
 
         // Step 3: Generate VAPID keys if not on Windows
@@ -46,11 +48,15 @@ class PrepareWebpushCommand extends Command
             warning('Skipping VAPID key generation on Windows. You should run "php artisan webpush:vapid" on a non-Windows environment.');
         } */
 
+        // Add VAPID variables to .env.example regardless of OS
+        note('Adding VAPID variables to .env.example...');
+        $this->addVapidVariablesToEnv();
+        $this->newLine();
+
         // Step 4: Copy a service worker file
         note('Copying service worker file...');
         $this->copyServiceWorker();
         $this->newLine();
-
 
         // Step 5: Copy webpush JS file
         note('Copying WebPush JS file...');
@@ -66,14 +72,14 @@ class PrepareWebpushCommand extends Command
     }
 
     /**
-     * Copy service worker file to public directory
+     * Copy service worker file to a public directory
      */
     protected function copyServiceWorker(): void
     {
-        $source = __DIR__ . '/../../stubs/sw.js';
+        $source      = __DIR__ . '/../../stubs/sw.js';
         $destination = public_path('sw.js');
 
-        if (!File::exists(public_path())) {
+        if (! File::exists(public_path())) {
             File::makeDirectory(public_path(), 0755, true);
         }
 
@@ -82,14 +88,14 @@ class PrepareWebpushCommand extends Command
     }
 
     /**
-     * Copy webpush JS file to public assets directory
+     * Copy webpush JS file to the public assets directory
      */
     protected function copyWebpushJs(): void
     {
-        $source = __DIR__ . '/../../stubs/webpush.js';
+        $source      = __DIR__ . '/../../stubs/webpush.js';
         $destination = public_path('assets/js/webpush.js');
 
-        if (!File::exists(public_path('assets/js'))) {
+        if (! File::exists(public_path('assets/js'))) {
             File::makeDirectory(public_path('assets/js'), 0755, true, true);
         }
 
@@ -98,41 +104,29 @@ class PrepareWebpushCommand extends Command
     }
 
     /**
-     * Update .env.example file with VAPID keys
+     * Add VAPID variables to the.env.example file
      */
-    protected function updateEnvExample(string $vapidOutput): void
+    protected function addVapidVariablesToEnv(): void
     {
         $envExamplePath = base_path('.env.example');
 
-        if (!File::exists($envExamplePath)) {
+        if (! File::exists($envExamplePath)) {
             warning('.env.example file not found. Please add VAPID keys manually.');
-            $this->line($vapidOutput);
+
             return;
         }
 
         $envContent = File::get($envExamplePath);
 
-        // Extract VAPID keys from output
-        preg_match('/VAPID_PUBLIC_KEY=(.+?)\n/', $vapidOutput, $publicKeyMatches);
-        preg_match('/VAPID_PRIVATE_KEY=(.+?)\n/', $vapidOutput, $privateKeyMatches);
-
-        if (!isset($publicKeyMatches[1]) || !isset($privateKeyMatches[1])) {
-            warning('Could not extract VAPID keys from output. Please add them manually.');
-            $this->line($vapidOutput);
-            return;
-        }
-
-        $publicKey = $publicKeyMatches[1];
-        $privateKey = $privateKeyMatches[1];
-
-        $vapidEnvVars = "\n# WebPush VAPID Keys\nVAPID_PUBLIC_KEY={$publicKey}\nVAPID_PRIVATE_KEY={$privateKey}\n";
+        // Prepare VAPID environment variables
+        $vapidEnvVars = "\n# WebPush VAPID Keys\nVAPID_PUBLIC_KEY=\"\"\nVAPID_PRIVATE_KEY=\"\"\nVAPID_SUBJECT=\"mailto:\${APP_NAME}@\${APP_URL}\"\n";
 
         // Check if VAPID keys already exist in .env.example
-        if (strpos($envContent, 'VAPID_PUBLIC_KEY=') === false) {
+        if (in_array(str_contains($envContent, 'VAPID_PUBLIC_KEY='), [0, false], true)) {
             File::append($envExamplePath, $vapidEnvVars);
-            info('VAPID keys added to .env.example file.');
+            info('VAPID environment variables added to .env.example file.');
         } else {
-            info('VAPID keys already exist in .env.example file.');
+            info('VAPID environment variables already exist in .env.example file.');
         }
     }
 }
