@@ -32,3 +32,22 @@ class User extends Model
     use HasPushSubscriptions;
 }
 ```
+
+And finally, you need to add the `FilamentWebpushPlugin` to your `**PanelProvider` class:
+
+```php
+namespace App\Providers\Filament;
+
+use FilamentWebpush\FilamentWebpushPlugin;
+
+class **PanelProvider extends PanelProvider
+{
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->plugins([
+                FilamentWebpushPlugin::make(),
+            ]);
+    }
+}
+```

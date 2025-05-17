@@ -43,6 +43,7 @@ class PrepareWebpushCommand extends Command
 
         // Step 4: Generate VAPID keys if not on Windows
         $isRunningOnWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+
         if (! $isRunningOnWindows) {
             info('Generating VAPID keys...');
 
@@ -79,7 +80,7 @@ class PrepareWebpushCommand extends Command
             $this->newLine();
         }
 
-        info('Final step: register FilamentWebpush\\FilamentWebpushPlugin in your panel provider to activate the plugin.');
+        info('Remember: register FilamentWebpush\\FilamentWebpushPlugin in your panel provider to activate the plugin.');
 
         return self::SUCCESS;
     }
@@ -106,10 +107,10 @@ class PrepareWebpushCommand extends Command
     protected function copyWebpushJs(): void
     {
         $source      = __DIR__ . '/../../stubs/webpush.js';
-        $destination = public_path('assets/js/webpush.js');
+        $destination = public_path('js/webpush.js');
 
-        if (! File::exists(public_path('assets/js'))) {
-            File::makeDirectory(public_path('assets/js'), 0755, true, true);
+        if (! File::exists(public_path('js'))) {
+            File::makeDirectory(public_path('js'), 0755, true, true);
         }
 
         File::copy($source, $destination);
