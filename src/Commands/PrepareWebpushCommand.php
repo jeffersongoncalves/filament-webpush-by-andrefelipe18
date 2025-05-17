@@ -42,7 +42,8 @@ class PrepareWebpushCommand extends Command
         $this->newLine();
 
         // Step 4: Generate VAPID keys if not on Windows
-        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        $isRunningOnWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        if (! $isRunningOnWindows) {
             info('Generating VAPID keys...');
 
             try {
@@ -58,8 +59,6 @@ class PrepareWebpushCommand extends Command
 
                 return self::FAILURE;
             }
-        } else {
-            warning('VAPID key generation is not supported on Windows. Please generate them at https://web-push-codelab.glitch.me/ and update your .env file manually.');
         }
 
         // Step 5: Copy service worker file
@@ -74,6 +73,11 @@ class PrepareWebpushCommand extends Command
 
         note('WebPush setup completed successfully!');
         $this->newLine();
+
+        if ($isRunningOnWindows) {
+            warning('VAPID key generation is not supported on Windows. Please generate them at https://web-push-codelab.glitch.me/ and update your .env file manually.');
+            $this->newLine();
+        }
 
         info('Final step: register FilamentWebpush\\FilamentWebpushPlugin in your panel provider to activate the plugin.');
 
