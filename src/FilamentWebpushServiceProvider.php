@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace FilamentWebpush;
 
 use FilamentWebpush\Commands\PrepareWebpushCommand;
+use FilamentWebpush\Commands\TestWebpushCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -14,7 +15,10 @@ class FilamentWebpushServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('filament-webpush')
-            ->hasCommand(PrepareWebpushCommand::class)
+            ->hasCommands([
+                PrepareWebpushCommand::class,
+                TestWebpushCommand::class,
+            ])
             ->hasViews();
     }
 

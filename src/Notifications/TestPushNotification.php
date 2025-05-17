@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace FilamentWebPush\Http\Controllers;
+namespace FilamentWebpush\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

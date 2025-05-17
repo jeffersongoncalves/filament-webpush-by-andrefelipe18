@@ -121,6 +121,33 @@ class NewPostPublished extends Notification implements ShouldQueue
 }
 ```
 
+### Testing Notifications
+
+You can test it if WebPush notifications are working correctly by using the built-in test command:
+
+```bash
+php artisan webpush:test {user_id}
+```
+
+This command will:
+
+1. Find the user with the provided ID
+2. Check if the user has any push subscriptions
+3. Send a test notification to that user
+
+Example:
+
+```bash
+php artisan webpush:test 1
+```
+
+Remember that you need to have a queue worker running for the notifications to be delivered:
+
+```bash
+php artisan queue:work
+```
+
+
 ### Sending Notifications
 
 To send a notification, you can use the standard Laravel notification system:
@@ -169,6 +196,8 @@ The package automatically registers a service worker at `/sw.js`. If you need to
 ### Windows Users
 
 If you're developing on Windows, the VAPID key generation may not work. In this case, you'll need to generate the keys manually as described in the Configuration section.
+
+Notification queues may not work as expected in Windows
 
 ## Advanced Usage
 
