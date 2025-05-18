@@ -32,9 +32,6 @@
             "FilamentWebpush\\": "src/"
         }
     },
-    "scripts": {
-        "post-autoload-dump": "@composer run prepare"
-    },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
