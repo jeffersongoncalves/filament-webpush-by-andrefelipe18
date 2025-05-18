@@ -27,12 +27,13 @@ class FilamentWebpushPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $panel->routes(function () use ($panel) {
-            Route::middleware(['web', 'auth:' . $panel->getAuthGuard()])->group(function () {
+        $panel->routes(function () use ($panel): void {
+            Route::middleware(['web', 'auth:' . $panel->getAuthGuard()])->group(function (): void {
                 Route::post('/push-subscriptions', [PushSubscriptionController::class, 'store'])->name('webpush-store');
                 Route::post('/push-subscriptions/delete', [PushSubscriptionController::class, 'destroy'])->name('webpush-destroy');
             });
         });
+
         if ($this->shouldRegisterSubscriptionStatsWidget()) {
             $panel->widgets([
                 WebpushSubscriptionStats::class,
@@ -45,7 +46,7 @@ class FilamentWebpushPlugin implements Plugin
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
             function () use ($panel) {
-                if (!auth($panel->getAuthGuard())->check()) {
+                if (! auth($panel->getAuthGuard())->check()) {
                     return '';
                 }
 
@@ -53,8 +54,8 @@ class FilamentWebpushPlugin implements Plugin
 
                 return view('filament-webpush::meta', [
                     'vapidPublicKey' => $vapidPublicKey,
-                    'storeUrl' => route('filament.' . $panel->getId() . '.webpush-store'),
-                    'destroyUrl' => route('filament.' . $panel->getId() . '.webpush-destroy'),
+                    'storeUrl'       => route('filament.' . $panel->getId() . '.webpush-store'),
+                    'destroyUrl'     => route('filament.' . $panel->getId() . '.webpush-destroy'),
                 ]);
             }
         );
@@ -62,7 +63,7 @@ class FilamentWebpushPlugin implements Plugin
         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_END,
             function () use ($panel) {
-                if (!auth($panel->getAuthGuard())->check()) {
+                if (! auth($panel->getAuthGuard())->check()) {
                     return '';
                 }
 
