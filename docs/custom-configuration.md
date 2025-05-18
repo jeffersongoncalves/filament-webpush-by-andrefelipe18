@@ -40,6 +40,8 @@ You can listen for subscription events in your application:
 ```php
 use NotificationChannels\WebPush\Events\NotificationSent;
 use NotificationChannels\WebPush\Events\NotificationFailed;
+use FilamentWebPush\Events\PushSubscriptionCreated;
+use FilamentWebPush\Events\PushSubscriptionDeleted;
 
 protected $listen = [
     NotificationSent::class => [
@@ -47,7 +49,13 @@ protected $listen = [
     ],
     NotificationFailed::class => [
         YourNotificationFailedListener::class,
-    ]
+    ],
+    PushSubscriptionCreated::class => [
+        YourSubscriptionCreatedListener::class,
+    ],
+    PushSubscriptionDeleted::class => [
+        YourSubscriptionDeletedListener::class,
+    ],
 ];
 ```
 

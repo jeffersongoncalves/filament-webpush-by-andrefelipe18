@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace FilamentWebPush\Http\Controllers;
 
+use FilamentWebPush\Events\PushSubscriptionCreated;
+use FilamentWebPush\Events\PushSubscriptionDeleted;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +25,11 @@ class PushSubscriptionController extends Controller
         $token           = $request->keys['auth'];
         $contentEncoding = $request->contentEncoding ?? '';
 
-        $user = Auth::user();
-        $user->updatePushSubscription($endpoint, $key, $token, $contentEncoding);
+        $user         = Auth::user();
+        $subscription = $user->updatePushSubscription($endpoint, $key, $token, $contentEncoding);
+
+        // Dispatch the subscription created event
+        PushSubscriptionCreated::dispatch($subscription, $user);
 
         return response()->json(['success' => true]);
     }
@@ -35,8 +40,13 @@ class PushSubscriptionController extends Controller
             'endpoint' => 'required',
         ]);
 
+        $endpoint = $request->endpoint;
+
         $user = Auth::user();
-        $user->deletePushSubscription($request->endpoint);
+        $user->deletePushSubscription($endpoint);
+
+        // Dispatch the subscription deleted event
+        PushSubscriptionDeleted::dispatch($endpoint, $user);
 
         return response()->json(['success' => true]);
     }
