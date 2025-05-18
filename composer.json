@@ -1,10 +1,10 @@
 {
     "name": "andrefelipe18/filament-webpush",
-    "description": "Easy way to send web push notifications in filament apps.",
+    "description": "The easiest way to use web push notifications in Filament.",
     "keywords": [
-        "filament-webpush",
         "laravel",
-        "filament-webpush"
+        "filament",
+        "webpush"
     ],
     "homepage": "https://github.com/andrefelipe18/filament-webpush",
     "license": "MIT",
@@ -29,13 +29,11 @@
     },
     "autoload": {
         "psr-4": {
-            "FilamentWebpush\\": "src/",
-            "FilamentWebpush\\Database\\Factories\\": "database/factories/"
+            "FilamentWebpush\\": "src/"
         }
     },
     "scripts": {
-        "post-autoload-dump": "@composer run prepare",
-        "format": "vendor/bin/pint"
+        "post-autoload-dump": "@composer run prepare"
     },
     "config": {
         "sort-packages": true,
