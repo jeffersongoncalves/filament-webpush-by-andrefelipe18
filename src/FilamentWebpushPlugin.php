@@ -10,7 +10,7 @@ use Filament\Support\Concerns\EvaluatesClosures;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use FilamentWebpush\Filament\Widgets\WebpushSubscriptionStats;
-use FilamentWebPush\Http\Controllers\PushSubscriptionController;
+use FilamentWebpush\Http\Controllers\PushSubscriptionController;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 

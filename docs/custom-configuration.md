@@ -40,8 +40,8 @@ You can listen for subscription events in your application:
 ```php
 use NotificationChannels\WebPush\Events\NotificationSent;
 use NotificationChannels\WebPush\Events\NotificationFailed;
-use FilamentWebPush\Events\PushSubscriptionCreated;
-use FilamentWebPush\Events\PushSubscriptionDeleted;
+use FilamentWebpush\Events\PushSubscriptionCreated;
+use FilamentWebpush\Events\PushSubscriptionDeleted;
 
 protected $listen = [
     NotificationSent::class => [
