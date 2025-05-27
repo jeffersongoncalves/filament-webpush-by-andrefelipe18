@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace FilamentWebPush\Events;
+namespace FilamentWebpush\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Auth\User;

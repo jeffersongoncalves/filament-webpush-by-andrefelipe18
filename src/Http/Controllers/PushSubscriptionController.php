@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace FilamentWebPush\Http\Controllers;
+namespace FilamentWebpush\Http\Controllers;
 
-use FilamentWebPush\Events\PushSubscriptionCreated;
-use FilamentWebPush\Events\PushSubscriptionDeleted;
+use FilamentWebpush\Events\PushSubscriptionCreated;
+use FilamentWebpush\Events\PushSubscriptionDeleted;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
