@@ -2,6 +2,14 @@
 
 All notable changes to `filament-webpush` will be documented in this file.
 
+## v1.1.2 - 2025-05-27
+
+### What's Changed
+
+* refactor(namespace): standardize naming to "FilamentWebpush" by @jeffersongoncalves in https://github.com/andrefelipe18/filament-webpush/pull/8
+
+**Full Changelog**: https://github.com/andrefelipe18/filament-webpush/compare/v1.1.1...v1.1.2
+
 ## v1.1.1 - 2025-05-27
 
 ### What's Changed
